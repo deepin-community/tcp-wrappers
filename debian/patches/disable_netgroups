@@ -1,0 +1,40 @@
+Description: disable support for NIS netgroups
+ This allows to stop linking the library with libnsl and its dependencies.
+Author: Marco d'Itri <md@linux.it>
+Bug-Debian: http://bugs.debian.org/1068311
+
+--- a/Makefile
++++ b/Makefile
+@@ -150,8 +150,8 @@ netbsd:
+ 
+ linux:
+ 	@make REAL_DAEMON_DIR=$(REAL_DAEMON_DIR) STYLE=$(STYLE) \
+-	LIBS=-lnsl RANLIB=ranlib ARFLAGS=rv AUX_OBJ=weak_symbols.o \
+-	NETGROUP="-DNETGROUP" TLI= VSYSLOG= BUGS= \
++	LIBS= RANLIB=ranlib ARFLAGS=rv AUX_OBJ=weak_symbols.o \
++	NETGROUP= TLI= VSYSLOG= BUGS= \
+ 	EXTRA_CFLAGS="-DSYS_ERRLIST_DEFINED -DHAVE_STRERROR -DHAVE_WEAKSYMS -DINET6=1 -Dss_family=__ss_family -Dss_len=__ss_len" all
+ 
+ musl:
+@@ -162,8 +162,8 @@ musl:
+ 
+ gnu:
+ 	@make REAL_DAEMON_DIR=$(REAL_DAEMON_DIR) STYLE=$(STYLE) \
+-	LIBS=-lnsl RANLIB=ranlib ARFLAGS=rv AUX_OBJ=weak_symbols.o \
+-	NETGROUP=-DNETGROUP TLI= VSYSLOG= BUGS= \
++	LIBS= RANLIB=ranlib ARFLAGS=rv AUX_OBJ=weak_symbols.o \
++	NETGROUP= TLI= VSYSLOG= BUGS= \
+ 	EXTRA_CFLAGS="-DSYS_ERRLIST_DEFINED -DHAVE_STRERROR -DINET6=1 -DHAVE_WEAKSYMS -D_REENTRANT" all
+ 
+ # This is good for many SYSV+BSD hybrids with NIS, probably also for HP-UX 7.x.
+--- a/hosts_access.5
++++ b/hosts_access.5
+@@ -83,6 +83,8 @@ A string that begins with an `@\' charac
+ (formerly YP) netgroup name. A host name is matched if it is a host
+ member of the specified netgroup. Netgroup matches are not supported
+ for daemon process names or for client user names.
++On Debian systems, support for NIS netgroups has been disabled since
++package version 7.6.q-33.
+ .IP \(bu
+ An expression of the form `n.n.n.n/m.m.m.m\' is interpreted as a
+ `net/mask\' pair. An IPv4 host address is matched if `net\' is equal to the

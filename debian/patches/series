@@ -31,3 +31,5 @@ fix_parsing_long_lines
 initgroups
 ignore_missing_inetdconf
 fix_warnings2
+fix_gcc15
+disable_netgroups
