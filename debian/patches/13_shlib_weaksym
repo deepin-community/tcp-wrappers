@@ -33,7 +33,7 @@
  LIB	= libwrap.a
  
 -all other: config-check tcpd tcpdmatch try-from safe_finger tcpdchk
-+shared/%.o: %.c
++shared/%.o: %.c shared
 +	$(CC) $(CFLAGS) $(SHCFLAGS) -c $< -o $@
 +
 +SOMAJOR = 0

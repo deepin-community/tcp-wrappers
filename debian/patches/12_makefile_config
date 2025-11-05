@@ -62,9 +62,15 @@
  	$(BUGS) $(SYSTYPE) $(AUTH) $(UMASK) \
  	-DREAL_DAEMON_DIR=\"$(REAL_DAEMON_DIR)\" $(STYLE) $(KILL_OPT) \
  	-DSEVERITY=$(SEVERITY) -DRFC931_TIMEOUT=$(RFC931_TIMEOUT) \
-@@ -713,11 +719,12 @@ all other: config-check tcpd tcpdmatch t
+@@ -711,14 +717,20 @@ all other: config-check tcpd tcpdmatch t
  
- config-check:
+ # Invalidate all object files when the compiler options (CFLAGS) have changed.
+ 
+-config-check:
++cflags:
++	echo $(CFLAGS) > cflags
++
++config-check: cflags
  	@set +e; test -n "$(REAL_DAEMON_DIR)" || { make; exit 1; }
 -	@set +e; echo $(CFLAGS) >/tmp/cflags.$$$$ ; \
 -	if cmp cflags /tmp/cflags.$$$$ ; \
@@ -75,7 +81,10 @@
 +	then rm cflags.new ; \
 +	else mv cflags.new cflags ; \
  	fi >/dev/null 2>/dev/null
-+	@if [ ! -d shared ]; then mkdir shared; fi
  
++shared:
++	mkdir -p shared
++
  $(LIB):	$(LIB_OBJ)
  	rm -f $(LIB)
+ 	$(AR) $(ARFLAGS) $(LIB) $(LIB_OBJ)
